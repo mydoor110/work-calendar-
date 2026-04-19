@@ -1,24 +1,33 @@
 name: Update Calendar
 on:
   schedule:
-    - cron: '0 0 * * 0' # 每周日自动更新
-  workflow_dispatch: # 支持手动点一下更新
+    - cron: '0 0 * * 0' # 每周日自动运行
+  workflow_dispatch: # 支持手动触发
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      # 这里把 v3 改成了 v4
+      - uses: actions/checkout@v4
+      
+      # 这里把 v4 改成了 v5
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
-      - name: Run
-        run: |
-          pip install ics
-          python generate_calendar.py
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+          python-version: '3.12' # 使用更稳定的版本
+          
+      - name: Install dependencies
+        run: pip install ics
+        
+      - name: Generate ICS
+        run: python generate_calendar.py
+        
+      # 这里把 v3 改成了 v4
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: .
           publish_branch: gh-pages
+
